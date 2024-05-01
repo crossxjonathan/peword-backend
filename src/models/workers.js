@@ -30,9 +30,9 @@ const searchWorkerByName = (name) => {
     return pool.query(query, [name]);
 };
 
-const sortByWorkers = async () => {
-    const query = 'SELECT * FROM workers ORDER BY name ASC;';
-    const { rows } = await pool.query(query);
+const sortByWorkers = async (limit, offset) => {
+    const query = 'SELECT * FROM workers ORDER BY name ASC LIMIT $1 OFFSET $2';
+    const { rows } = await pool.query(query, [limit, offset]);
     return rows;
 
 }

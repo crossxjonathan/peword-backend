@@ -113,21 +113,19 @@ const searchKey = async (req, res, next) => {
     }
 };
 
-// SORT BY NAME
+// SORT BY NAME & PAGINATION
 const workerSortByName = async (req, res, next) => {
     try {
-        const workers = await sortByWorkers();
+        const page = parseInt (req.query.page || 1)
+        const limit = parseInt (req.query.limit || 5)
+        const offset = (page - 1) * limit
+        const workers = await sortByWorkers(limit,offset);
         response(res, workers, 200, 'Get All Workers Sort By Name Successful!!')
     } catch (error) {
         console.log(error);
         response(res, null, 500, 'Get All Workers Sort By Name is Failed.....')
     }
 };
-
-// PAGINATION
-const workerPaginationPage = () => {
-
-}
 
 
 module.exports = {
@@ -137,6 +135,5 @@ module.exports = {
     updateWorker,
     detailWorker,
     searchKey,
-    workerSortByName,
-    workerPaginationPage
+    workerSortByName
 }
