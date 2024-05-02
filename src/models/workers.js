@@ -1,7 +1,14 @@
 const pool = require("../configs/db")
 
-const selectAllWorker = ({ limit, offset, search }) => {
-    const query = "SELECT * FROM workers WHERE name ILIKE $1 ORDER BY name ASC LIMIT $2 OFFSET $3";
+const selectAllWorker = ({ limit, offset, search, sortby, sort }) => {
+    let orderByClause = '';
+    if (sortby && sort) {
+        orderByClause = `ORDER BY ${sortby} ${sort}`;
+    } else {
+        orderByClause = 'ORDER BY name ASC'; 
+    }
+
+    const query = `SELECT * FROM workers WHERE name ILIKE $1 ${orderByClause} LIMIT $2 OFFSET $3`;
     const queryParams = [`%${search}%`, limit, offset];
     return pool.query(query, queryParams);
 };

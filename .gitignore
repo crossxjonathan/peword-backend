@@ -1,1 +1,11 @@
-node modules
+# Ignore node_modules directory
+node_modules
+
+# Ignore ESLint cache
+.eslintcache
+
+# Ignore VS Code specific settings (optional)
+.vscode/settings.json
+
+.eslintcache
+node_modules/

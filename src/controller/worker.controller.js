@@ -1,18 +1,22 @@
 const { selectAllWorker, createWorker, removeWorker, uptodateWorker, getDetailWorker } = require('../models/workers');
 const { response } = require('../helper/common');
 
-// GET ALL WORKERS || PAGINATION || SEARCH || ASC
+// GET ALL WORKERS || PAGINATION || SEARCH || SORT || SORTBY
 const getAllWorkers = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page || 1)
         const limit = parseInt(req.query.limit || 3)
         const offset = (page - 1) * limit;
         const search = req.query.search || '';
+        const sort = req.query.order || 'ASC';
+        const sortby = req.query.sortby || 'name';
         const { rows } = await selectAllWorker({
             limit,
             page,
             offset,
-            search
+            search,
+            sort,
+            sortby
         })
         response(res, rows, 200, 'Get All Worker Successful!!')
     } catch (error) {

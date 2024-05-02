@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
+const helmet = require('helmet');
 const cors = require('cors');
+const xss = require('xss-clean');
 
 const bodyParser = require('body-parser');
 const recruitersRoute = require('./src/routes/recruiters.route');
@@ -10,6 +12,8 @@ const workersRoute = require('./src/routes/workers.route');
 const PORT = process.env.PORT
 const app = express();
 app.use(morgan('dev'));
+app.use(helmet());
+app.use(xss());
 
 app.use(bodyParser.json());
 // const optionCors = {
