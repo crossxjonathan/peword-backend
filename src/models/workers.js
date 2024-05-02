@@ -1,8 +1,10 @@
 const pool = require("../configs/db")
 
-const selectAllWorker = () => {
-    return pool.query("SELECT * FROM workers ORDER BY id ASC")
-}
+const selectAllWorker = ({ limit, offset, search }) => {
+    const query = "SELECT * FROM workers WHERE name ILIKE $1 ORDER BY name ASC LIMIT $2 OFFSET $3";
+    const queryParams = [`%${search}%`, limit, offset];
+    return pool.query(query, queryParams);
+};
 
 const createWorker = ({name, description, job_desk, domicile, workplace}) => {
     return pool.query(
@@ -25,24 +27,11 @@ const getDetailWorker = (id) => {
     return pool.query("SELECT * FROM workers WHERE id = $1", [id]);
 }
 
-const searchWorkerByName = (name) => {
-    const query = `SELECT * FROM workers WHERE name ILIKE '%' || $1 || '%'`;
-    return pool.query(query, [name]);
-};
-
-const sortByWorkers = async (limit, offset) => {
-    const query = 'SELECT * FROM workers ORDER BY name ASC LIMIT $1 OFFSET $2';
-    const { rows } = await pool.query(query, [limit, offset]);
-    return rows;
-
-}
 
 module.exports = {
     selectAllWorker,
     createWorker,
     removeWorker,
     uptodateWorker,
-    getDetailWorker,
-    searchWorkerByName,
-    sortByWorkers
+    getDetailWorker
 }
