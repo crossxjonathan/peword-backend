@@ -1,28 +1,27 @@
--- CREATE TABLE users(
---     id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
---     name VARCHAR(64),
---     address TEXT,
---     position TEXT,
---     company TEXT,
---     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     updated_at TIMESTAMP,
---     PRIMARY KEY(id)
--- );
-
--- INSERT INTO users(name, address, position, company)VALUES('suryani indrawati', 'Jambi', 'Manager Marketing', 'PT Indorama tbk');
-
+CREATE TABLE users (
+    id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+    email VARCHAR(64) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50),
+    PRIMARY KEY (id)
+);
 
 CREATE TABLE workers(
     id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(64),
     description TEXT,
+    phone VARCHAR(20),
     job_desk TEXT,
     domicile TEXT,
     workplace TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
+    users_id INT,
     PRIMARY KEY(id)
 );
+
+-- INSERT INTO users(email, password, role, worker_id )VALUES('sheilamarcia@gmail.com', 'abc123', 'Manufaktur',6);
+
 
 CREATE TABLE recruiters(
     id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
@@ -35,13 +34,63 @@ CREATE TABLE recruiters(
     instagram TEXT,
     linkedin TEXT,
     photo BYTEA,
+    users_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
     PRIMARY KEY(id)
 );
 
-SELECT * FROM workers WHERE name LIKE '%k%';
+CREATE TABLE skills(
+    id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+    skill_name VARCHAR(64),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    PRIMARY KEY (id),
+    worker_id INT,
+    FOREIGN KEY (worker_id) REFERENCES workers(id)
+);
 
+-- INSERT INTO skills(skill_name)VALUES('CSS');
+
+CREATE TABLE experience(
+    id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+    position VARCHAR(64),
+    company_name VARCHAR(64),
+    date_company DATE,
+    description_company TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    PRIMARY KEY (id),
+    worker_id INT,
+    FOREIGN KEY (worker_id) REFERENCES workers(id)
+);
+
+CREATE TABLE portofolio (
+    id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+    application_name VARCHAR(64),
+    link_repository VARCHAR(255),
+    type_portofolio VARCHAR(20),
+    upload_image VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    worker_id INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (worker_id) REFERENCES workers(id)
+);
+
+
+CREATE TABLE hire (
+    id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+    message_purpose VARCHAR(255),
+    name VARCHAR(64),
+    email VARCHAR(64) NOT NULL,
+    phone VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    recruiter_id INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (recruiter_id) REFERENCES recruiters(id)
+);
 
 -- ADD WORKERS & RECRUITERS
 
