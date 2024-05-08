@@ -48,8 +48,6 @@ const registerWorkers = async (req, res, next) => {
     const { email, password, name, phone } = req.body;
     const role = 'workers'
     try {
-        // CHECK EMAIL YANG MASUK SUDAH EXIST APA BELUM DITABLE WORKER
-        // KALAU SUDAH ADA EMAILNYA, KASIH FEEDBACK KE FRONTEND, "Email exist, Please Login"
         const emailExist = await checkEmailExist(email);
         if (emailExist === true) {
             return response(res, null, 500, 'email exist, please login!!')
@@ -69,8 +67,6 @@ const registerRecruiters = async (req, res, next) => {
     const { email, password, name, company, position, phone } = req.body;
     const role = 'recruiters'
     try {
-        // CHECK EMAIL YANG MASUK SUDAH EXIST APA BELUM DITABLE RECRUITERS
-        // KALAU SUDAH ADA EMAILNYA, KASIH FEEDBACK KE FRONTEND, "Email exist, Please Login"
         const emailExist = await checkEmailExist(email);
         if (emailExist === true) {
             return response(res, null, 500, 'email exist, please login!!')

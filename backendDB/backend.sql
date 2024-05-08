@@ -46,8 +46,8 @@ CREATE TABLE skills(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
     PRIMARY KEY (id),
-    worker_id INT,
-    FOREIGN KEY (worker_id) REFERENCES workers(id)
+    workers_id INT,
+    FOREIGN KEY (workers_id) REFERENCES workers(id)
 );
 
 -- INSERT INTO skills(skill_name)VALUES('CSS');
@@ -56,26 +56,27 @@ CREATE TABLE experience(
     id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
     position VARCHAR(64),
     company_name VARCHAR(64),
-    date_company DATE,
+    month_company VARCHAR(20),
+    year_company VARCHAR(4),
     description_company TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
     PRIMARY KEY (id),
-    worker_id INT,
-    FOREIGN KEY (worker_id) REFERENCES workers(id)
+    workers_id INT,
+    FOREIGN KEY (workers_id) REFERENCES workers(id)
 );
 
-CREATE TABLE portofolio (
+CREATE TABLE portfolio (
     id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
     application_name VARCHAR(64),
     link_repository VARCHAR(255),
-    type_portofolio VARCHAR(20),
-    upload_image VARCHAR(255),
+    type_portfolio VARCHAR(20),
+    upload_image BYTEA,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    worker_id INT,
+    updated_at TIMESTAMP,
+    workers_id INT,
     PRIMARY KEY (id),
-    FOREIGN KEY (worker_id) REFERENCES workers(id)
+    FOREIGN KEY (workers_id) REFERENCES workers(id)
 );
 
 
@@ -85,11 +86,14 @@ CREATE TABLE hire (
     name VARCHAR(64),
     email VARCHAR(64) NOT NULL,
     phone VARCHAR(20),
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    recruiter_id INT,
+    updated_at TIMESTAMP,
+    recruiters_id INT,
+    workers_id INT,
     PRIMARY KEY (id),
-    FOREIGN KEY (recruiter_id) REFERENCES recruiters(id)
+    FOREIGN KEY (workers_id) REFERENCES workers(id),
+    FOREIGN KEY (recruiters_id) REFERENCES recruiters(id)
 );
 
 -- ADD WORKERS & RECRUITERS
