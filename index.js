@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const xss = require('xss-clean');
 const passport = require('passport');
+const path = require('path');
 
 const bodyParser = require('body-parser');
 
@@ -15,6 +16,7 @@ const skillRoute = require('./src/routes/skills.route');
 const experienceRoute = require('./src/routes/experience.route');
 const portfolioRoute = require('./src/routes/portfolio.route');
 const hireRoute = require('./src/routes/hire.route');
+const uploadRoute = require('./src/routes/upload.route');
 
 const { JwtFunction } = require('./src/middleware/jwt');
 
@@ -44,6 +46,7 @@ app.use('/skills', skillRoute);
 app.use('/experience', experienceRoute);
 app.use('/portfolio', portfolioRoute);
 app.use('/hire', hireRoute);  // this is not already finish
+app.use('/upload', uploadRoute);
 
 
 // ERROR HANDLING
@@ -55,6 +58,9 @@ app.use((err, req, res, next) => {
     message: messageError
    })
 })
+
+console.log(__dirname, "<<upload storage");
+app.use('/file', express.static(path.join(__dirname, '/upload')))
 
 //PORT
 app.listen(PORT, () => {

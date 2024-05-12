@@ -34,11 +34,26 @@ const getDetailWorker = (id) => {
     return pool.query("SELECT * FROM workers WHERE id = $1", [id]);
 }
 
+const findUserById = async (id, relation = null) => {
+    let query = `SELECT users.id, users.email, users.role, users.password`;
+    if (relation) {
+        query += `, ${relation}.*`;
+    }
+    query += ` FROM users`;
+    if (relation) {
+        query += ` JOIN ${relation} ON users.id = ${relation}.user_id`;
+    }
+    query += ` WHERE users.id = $1`;
+
+    return pool.query(query, [id]);
+}
+
 
 module.exports = {
     selectAllWorker,
     createWorker,
     removeWorker,
     uptodateWorker,
-    getDetailWorker
+    getDetailWorker,
+    findUserById
 }

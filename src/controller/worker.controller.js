@@ -1,9 +1,29 @@
-const { selectAllWorker, createWorker, removeWorker, uptodateWorker, getDetailWorker } = require('../models/workers');
+const { selectAllWorker, createWorker, removeWorker, uptodateWorker, getDetailWorker, findUserById } = require('../models/workers');
 const { response } = require('../helper/common');
+
+// PROFILE
+const profile = async(req, res, next) => {
+    const userid = req.decoded.sub
+    // console.log(userid, 'userid');
+    const {rows: [user]} = await findUserById(userid);
+    delete user.password
+    // console.log(user, "profile");
+    if (user) {
+        res.json({ profile: user });
+    } else {
+        res.status(404).json({ message: 'User not found' });
+    }
+}
+
+// UPLOAD 
+// const uploadProfilePic = (req, res, next) => {
+
+// }
 
 // GET ALL WORKERS || PAGINATION || SEARCH || SORT || SORTBY
 const getAllWorkers = async (req, res, next) => {
     try {
+        // console.log(req.decoded.email);
         const page = parseInt(req.query.page || 1)
         const limit = parseInt(req.query.limit || 3)
         const offset = (page - 1) * limit;
@@ -131,53 +151,11 @@ const detailWorker = async (req, res, next) => {
     }
 };
 
-// SEARCH WORKER BY NAME
-// const searchKey = async (req, res, next) => {
-//     const name = req.params.name;
-//     try {
-//         const { rows } = await searchWorkerByName(name);
-//         if (rows.length > 0) {
-//             res.status(200).json({
-//                 status: 'success',
-//                 message: 'Search result:',
-//                 data: rows
-//             });
-//         } else {
-//             res.status(404).json({
-//                 status: 'error',
-//                 message: `Worker not Found '${name}'`
-//             });
-//         }
-//     } catch (error) {
-//         console.error('Error searching workers:', error);
-//         res.status(500).json({
-//             status: 'error',
-//             message: 'Internal Server Error'
-//         });
-//     }
-// };
-
-// // SORT BY NAME & PAGINATION
-// const workerSortByName = async (req, res, next) => {
-//     try {
-//         const page = parseInt (req.query.page || 1)
-//         const limit = parseInt (req.query.limit || 5)
-//         const offset = (page - 1) * limit
-//         const workers = await sortByWorkers(limit,offset);
-//         response(res, workers, 200, 'Get All Workers Sort By Name Successful!!')
-//     } catch (error) {
-//         console.log(error);
-//         response(res, null, 500, 'Get All Workers Sort By Name is Failed.....')
-//     }
-// };
-
-
 module.exports = {
     getAllWorkers,
     addWorker,
     deleteWorker,
     updateWorker,
     detailWorker,
-    // searchKey,
-    // workerSortByName
+    profile
 }

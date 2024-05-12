@@ -1,5 +1,8 @@
 const { workersRegister, recruitersRegister, userRegister, checkUserByEmail, getWorkersDetail, getRecruiterDetail, checkEmailExist, tokenFunction } = require('../models/users');
 const { response, responsecookies } = require('../helper/common');
+const { refreshTokenJWT } = require('../middleware/refreshjwt');
+const jwt = require('jsonwebtoken');
+
 const bcrypt = require('bcrypt');
 
 const saltNumber = 10;
@@ -18,15 +21,18 @@ const Login = async (req, res, next) => {
             return response(res, null, 500, 'Wrong password');
         }
         const userRole = user.role;
+        let userToBeSend = {};
 
-        let userToBeSend = {}
         if (userRole === 'workers') {
             userToBeSend = await getWorkersDetail({ id: user.id });
         } else {
+            (userRole === 'recruiters') 
             userToBeSend = await getRecruiterDetail({ id: user.id });
         }
 
         const token = tokenFunction(user);
+        // console.log(token, "<<<token");
+        const newRefreshToken = refreshTokenJWT(user.id);
 
         let options = {
             maxAge: 1000 * 60 * 720,
@@ -37,12 +43,36 @@ const Login = async (req, res, next) => {
             path: '/'
         }
         userToBeSend.token = token;
-        return responsecookies(res, userToBeSend, 200, 'Login Successful', token, options);
+        userToBeSend.refreshToken = newRefreshToken;
+        return responsecookies(res, userToBeSend, 200, 'Login Successful', options);
     } catch (error) {
         console.error('Error fetching user by id:', error);
         return response(res, null, 500, 'Something wrong, please try again');
     }
 };
+
+const checkRolesByToken = (req, res, next) => {
+    const user = req.user;
+    return(res, user, 200, 'Role is authorized')
+};
+
+
+const refreshToken = (req, res, next) => {
+    const refreshToken = req.body.refreshToken
+    const decoded = jwt.verify(refreshToken, process.env.JWTSECRET)
+
+    const payload = {
+        email: decoded.email,
+        role:decoded.role
+    }
+
+    const data = {
+        token: tokenFunction(payload),
+        refreshToken: refreshTokenJWT(payload)
+        
+    }
+    response(res, data, 200, "Refresh Token Success!!")
+}
 
 const registerWorkers = async (req, res, next) => {
     const { email, password, name, phone } = req.body;
@@ -85,5 +115,7 @@ const registerRecruiters = async (req, res, next) => {
 module.exports = {
     Login,
     registerWorkers,
-    registerRecruiters
+    registerRecruiters,
+    refreshToken,
+    checkRolesByToken
 };

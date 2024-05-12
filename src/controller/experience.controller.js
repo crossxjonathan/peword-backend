@@ -1,7 +1,6 @@
 const { response } = require('../helper/common');
 const { createExperience, selectAllExperience, uptodateExperience, getDetailExperience, removeExperience } = require('../models/experience');
-
-
+const setClient = require('../configs/redis');
 // GET ALL EXPERIENCE
 const getAllExperience = async (req, res, next) => {
 
@@ -81,6 +80,9 @@ const updateExperience = async (req, res, next) => {
 const detailExperience = async (req, res, next) => {
     const id = req.params.id
     const { rows: [user] } = await getDetailExperience(id)
+    // const client = await setClient()
+    // console.log(client, "<<<<<<redis");
+    // await client.setEx(`experience/${id}`, 60*60, JSON.stringify[user])
     res.json({
         status: 'success',
         data: user

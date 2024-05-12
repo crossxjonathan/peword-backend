@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const getWorkersDetail = async ({ id }) => {
     const result = await pool.query(
-        `SELECT u.id, u.email, w.name, w.phone 
+        `SELECT u.id, u.email, u.role, w.name, w.phone
         FROM users u
         INNER JOIN workers w ON w.users_id = u.id
         WHERE w.users_id = $1`,
@@ -15,7 +15,7 @@ const getWorkersDetail = async ({ id }) => {
 
 const getRecruiterDetail = async ({ id }) => {
     const result = await pool.query(
-        `SELECT u.id, u.email, r.name, r.company, r.position 
+        `SELECT u.id, u.email, u.role, r.name, r.company, r.position
         FROM users u
         INNER JOIN recruiters r ON r.users_id = u.id
         WHERE r.users_id = $1`,
@@ -39,10 +39,15 @@ const checkEmailExist = async (email) => {
 
 const tokenFunction = (user) => {
     // console.log(user, '<<<user')
-    const userid = user.id;
+    const { id: userid, email, role } = user;
     const secret = process.env.JWTSECRET;
-    const obj = { sub: userid };
-    const token = jwt.sign(obj, secret, { expiresIn: '1d'});
+    const obj = { 
+        sub: userid,
+        email: email,
+        role: role 
+    };
+    // console.log(obj, "object");
+    const token = jwt.sign(obj, secret, { expiresIn: '12h'});
     return token 
 }
 
