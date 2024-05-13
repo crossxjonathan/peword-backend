@@ -27,10 +27,10 @@ app.use(helmet());
 app.use(xss());
 
 app.use(bodyParser.json());
-const optionCors = {
-    origin: ['http://localhost:3000', 'https://fwm19firman1-firman-jonathans-projects.vercel.app/']
-}
-app.use(cors(optionCors));
+// const optionCors = {
+//     origin: ['http://localhost:3000', 'https://fwm19firman1-firman-jonathans-projects.vercel.app/']
+// }
+app.use(cors());
 
 
 app.use(passport.initialize());
