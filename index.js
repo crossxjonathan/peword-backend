@@ -22,21 +22,17 @@ const { JwtFunction } = require('./src/middleware/jwt');
 
 const PORT = process.env.PORT
 const app = express();
-
-module.exports = (req, res) => {
-    res.status(200).json({ message: 'Hello, world!' });
-};
-
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(xss());
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // const optionCors = {
 //     origin: ['http://localhost:3000', 'https://fwm19firman1-firman-jonathans-projects.vercel.app/']
 // }
 app.use(cors());
-
 
 app.use(passport.initialize());
 passport.use('peWorldJWT', JwtFunction);
@@ -50,7 +46,7 @@ app.use('/users', userRoute);
 app.use('/skills', skillRoute);
 app.use('/experience', experienceRoute);
 app.use('/portfolio', portfolioRoute);
-app.use('/hire', hireRoute);  // this is not already finish
+app.use('/hire', hireRoute);
 app.use('/upload', uploadRoute);
 
 
@@ -65,7 +61,7 @@ app.use((err, req, res, next) => {
 })
 
 console.log(__dirname, "<<upload storage");
-app.use('/file', express.static(path.join(__dirname, '/upload')))
+app.use('/file', express.static(path.join(__dirname, 'upload')))
 
 //PORT
 app.listen(PORT, () => {
