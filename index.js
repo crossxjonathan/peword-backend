@@ -22,6 +22,11 @@ const { JwtFunction } = require('./src/middleware/jwt');
 
 const PORT = process.env.PORT
 const app = express();
+
+module.exports = (req, res) => {
+    res.status(200).json({ message: 'Hello, world!' });
+};
+
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(xss());
