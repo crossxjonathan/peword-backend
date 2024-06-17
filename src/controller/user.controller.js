@@ -3,7 +3,7 @@ const { response, responsecookies } = require('../helper/common');
 const { refreshTokenJWT } = require('../middleware/refreshjwt');
 const jwt = require('jsonwebtoken');
 
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 const saltNumber = 10;
 
