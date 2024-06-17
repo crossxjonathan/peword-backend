@@ -9,12 +9,15 @@
     "builds": [
         {
             "src": "index.js",
-            "use": "@now/node",
+            "use": "@vercel/node",
             "config": {
                 "includeFiles": [
                     "dist/**"
                 ]
             }
         }
-    ]
+    ],
+    "engines": {
+        "node": "14.x"
+    }
 }
