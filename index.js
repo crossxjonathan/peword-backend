@@ -29,10 +29,10 @@ app.use(xss());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const optionCors = {
-//     origin: ['http://localhost:3000', 'https://fwm19firman1-firman-jonathans-projects.vercel.app/']
-// }
-app.use(cors());
+const optionCors = {
+    origin: ['http://localhost:3000', 'https://peworld-backend-mu.vercel.app/']
+}
+app.use(cors(optionCors));
 
 app.use(passport.initialize());
 passport.use('peWorldJWT', JwtFunction);
