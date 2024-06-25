@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const optionCors = {
-    origin: ['http://localhost:3000', 'https://peworld-backend-mu.vercel.app/']
+    origin: ['http://localhost:5173/', 'https://peworld-backend-mu.vercel.app/']
 }
 app.use(cors(optionCors));
 
