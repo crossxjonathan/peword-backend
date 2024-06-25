@@ -30,9 +30,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const optionCors = {
-    origin: ['http://localhost:5173/', 'https://peworld-backend-mu.vercel.app/']
-}
+    origin: [
+        'http://localhost:5173', 
+        'https://peworld-backend-mu.vercel.app', 
+        'https://peworld-fwm19.vercel.app'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
 app.use(cors(optionCors));
+app.options('*', cors(optionCors));
+
 
 app.use(passport.initialize());
 passport.use('peWorldJWT', JwtFunction);
@@ -53,11 +62,11 @@ app.use('/upload', uploadRoute);
 // ERROR HANDLING
 app.use((err, req, res, next) => {
     console.log(err);
-   const messageError = err.message || 'Internal Server Error'
-   const statusCode = err.statusCode || 500
-   res.status(statusCode).json({
-    message: messageError
-   })
+    const messageError = err.message || 'Internal Server Error'
+    const statusCode = err.statusCode || 500
+    res.status(statusCode).json({
+        message: messageError
+    })
 })
 
 console.log(__dirname, "<<upload storage");
