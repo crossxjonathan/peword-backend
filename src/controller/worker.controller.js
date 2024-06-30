@@ -1,19 +1,24 @@
-const { selectAllWorker, createWorker, removeWorker, uptodateWorker, getDetailWorker, findUserById } = require('../models/workers');
+/* eslint-disable no-unused-vars */
+const { selectAllWorker, getWorker, removeWorker, uptodateWorker, getDetailWorker, findUserById } = require('../models/workers');
 const { response } = require('../helper/common');
 
 // PROFILE
-const profile = async(req, res, next) => {
-    const userid = req.decoded.sub
-    // console.log(userid, 'userid');
-    const {rows: [user]} = await findUserById(userid);
-    delete user.password
-    // console.log(user, "profile");
-    if (user) {
-        res.json({ profile: user });
-    } else {
-        res.status(404).json({ message: 'User not found' });
+const profile = async (req, res, next) => {
+    try {
+        const userid = req.decoded.sub;
+        console.log(userid, 'userid');
+        const { rows: [user] } = await getWorker(userid);
+        console.log(user, "profile");
+        if (user) {
+            res.json({ profile: user });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
 
 // UPLOAD 
 // const uploadProfilePic = (req, res, next) => {
@@ -41,53 +46,6 @@ const getAllWorkers = async (req, res, next) => {
         response(res, rows, 200, 'Get All Worker Successful!!')
     } catch (error) {
         console.log(error);
-        const objErr = {
-            message: 'something broke!!',
-            statusCode: 500
-        }
-        next(objErr)
-    }
-};
-
-// ADD WORKER
-const addWorker = async (req, res, next) => {
-    const { name, description, job_desk, domicile, workplace, id } = req.body
-
-    const validationCharacter = /^[a-zA-Z\s]*$/;
-
-    if (!validationCharacter.test(name)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Validation Name is Failed. do not use symbol in name!!'
-        });
-    }
-
-    if (!validationCharacter.test(job_desk)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Validation position is Failed. do not use symbol in position!!'
-        });
-    }
-
-    if (!validationCharacter.test(domicile)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Validation city is Failed. do not use symbol in city!!'
-        });
-    }
-
-    const data = {
-        id,
-        name,
-        description,
-        job_desk,
-        domicile,
-        workplace
-    };
-    try {
-        await createWorker(data)
-        response(res, data, 201, 'Add Worker Successful!!')
-    } catch (error) {
         const objErr = {
             message: 'something broke!!',
             statusCode: 500
@@ -142,6 +100,7 @@ const detailWorker = async (req, res, next) => {
     try {
         const { rows: [worker] } = await getDetailWorker(id)
         response(res, worker, 200, 'Get Worker Successful!!')
+    // eslint-disable-next-line no-unused-vars
     } catch (error) {
         const objErr = {
             message: 'something broke!!',
@@ -153,7 +112,6 @@ const detailWorker = async (req, res, next) => {
 
 module.exports = {
     getAllWorkers,
-    addWorker,
     deleteWorker,
     updateWorker,
     detailWorker,

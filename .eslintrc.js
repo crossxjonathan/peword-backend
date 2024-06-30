@@ -1,13 +1,15 @@
 {
   "env": {
     "browser": true,
-      "commonjs": true,
-        "es2021": true,
-          "node": true
+    "commonjs": true,
+    "es2021": true,
+    "node": true
   },
   "extends": "eslint:recommended",
-    "parserOptions": {
+  "parserOptions": {
     "ecmaVersion": 12
   },
-  "rules": { }
+  "rules": {
+    "no-unused-vars": ["error", { "varsIgnorePattern": "process.env" }]
+  }
 }

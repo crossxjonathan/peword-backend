@@ -10,3 +10,4 @@ node_modules
 .eslintcache
 node_modules/
 .env
+.env.local

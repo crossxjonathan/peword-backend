@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 const { workersRegister, recruitersRegister, userRegister, checkUserByEmail, getWorkersDetail, getRecruiterDetail, checkEmailExist, tokenFunction } = require('../models/users');
 const { response, responsecookies } = require('../helper/common');
 const { refreshTokenJWT } = require('../middleware/refreshjwt');
@@ -15,41 +17,44 @@ const Login = async (req, res, next) => {
         if (!user) {
             return response(res, null, 500, 'User not exist');
         }
-        const isPasswordValid = await bcrypt.compare(password, user.password)
 
+        const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return response(res, null, 500, 'Wrong password');
         }
+
         const userRole = user.role;
         let userToBeSend = {};
 
         if (userRole === 'workers') {
             userToBeSend = await getWorkersDetail({ id: user.id });
-        } else {
-            (userRole === 'recruiters') 
+        } else if (userRole === 'recruiters') {
             userToBeSend = await getRecruiterDetail({ id: user.id });
+        } else {
+            return response(res, null, 500, 'Invalid role');
         }
 
         const token = tokenFunction(user);
-        // console.log(token, "<<<token");
         const newRefreshToken = refreshTokenJWT(user.id);
 
         let options = {
-            maxAge: 1000 * 60 * 720,
+            maxAge: 1000 * 60 * 60 * 24,
             httpOnly: false,
             sameSite: 'none',
             secure: true,
             signed: false,
             path: '/'
-        }
+        };
+
         userToBeSend.token = token;
         userToBeSend.refreshToken = newRefreshToken;
         return responsecookies(res, userToBeSend, 200, 'Login Successful', options);
     } catch (error) {
-        console.error('Error fetching user by id:', error);
+        console.error('Error fetching user by email:', error);
         return response(res, null, 500, 'Something wrong, please try again');
     }
 };
+
 
 const checkRolesByToken = (req, res, next) => {
     const user = req.user;

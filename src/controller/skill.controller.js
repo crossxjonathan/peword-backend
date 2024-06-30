@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { selectAllSkill, createSkill, removeSkill, uptodateSkill, getDetailSkill } = require('../models/skills');
 const { response } = require('../helper/common');
 

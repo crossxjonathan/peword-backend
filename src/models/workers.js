@@ -13,10 +13,10 @@ const selectAllWorker = ({ limit, offset, search, sortby, sort }) => {
     return pool.query(query, queryParams);
 };
 
-const createWorker = ({name, description, job_desk, domicile, workplace}) => {
+const getWorker = (userid) => {
     return pool.query(
-        `INSERT INTO workers (name, description, job_desk, domicile, workplace) VALUES ($1, $2, $3, $4, $5) `, 
-        [name, description, job_desk, domicile, workplace]
+        'SELECT name, description, job_desk, domicile, workplace FROM workers WHERE id = $1',
+        [userid]
     );
 };
 
@@ -51,7 +51,7 @@ const findUserById = async (id, relation = null) => {
 
 module.exports = {
     selectAllWorker,
-    createWorker,
+    getWorker,
     removeWorker,
     uptodateWorker,
     getDetailWorker,
