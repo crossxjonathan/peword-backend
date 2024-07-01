@@ -21,35 +21,29 @@ const uploadSingle = (req, res, next) => {
 
 const updateUpload = (req, res, next) => {
     const { fileId } = req.params;
-    const { filename } = req.body;
+    const filename = req.body.filename;
 
-    const updateData = {
-        fileId,
-        filename,
-        message: 'File information updated successfully'
-    };
+    if (!req.file) {
+        return response(res, { message: 'No file uploaded' }, 400, 'Update Image Failed');
+    }
 
-    response(res, updateData, 200, 'Updated Image Success!!');
-};
-
-const deleteUpload = (req, res, next) => {
-    const { fileId } = req.params;
-
-    cloudinary.uploader.destroy(fileId, (error, result) => {
+    cloudinary.uploader.upload_stream({ public_id: fileId, resource_type: 'image', overwrite: true }, (error, result) => {
         if (error) {
             return next(error);
         } else {
-            const deleteData = {
-                fileId,
-                message: 'File Delete Successfully'
+            const updateData = {
+                fileId: result.public_id,
+                file: result.secure_url,
+                setName: filename
             };
-            response(res, deleteData, 200, 'Delete Image Success!!');
+
+            response(res, updateData, 200, 'Updated Image Success!!');
         }
-    });
+    }).end(req.file.buffer);
 };
+
 
 module.exports = {
     uploadSingle,
     updateUpload,
-    deleteUpload
 };

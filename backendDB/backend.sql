@@ -14,6 +14,7 @@ CREATE TABLE workers(
     job_desk TEXT,
     domicile TEXT,
     workplace TEXT,
+    photo VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
     users_id INT,

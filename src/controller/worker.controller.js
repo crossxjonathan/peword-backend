@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { selectAllWorker, getWorker, removeWorker, uptodateWorker, getDetailWorker, findUserById } = require('../models/workers');
+const { selectAllWorker, getWorker, removeWorker, uptodateWorker, getDetailWorker } = require('../models/workers');
 const { response } = require('../helper/common');
 
 // PROFILE
@@ -19,11 +19,6 @@ const profile = async (req, res, next) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-
-// UPLOAD 
-// const uploadProfilePic = (req, res, next) => {
-
-// }
 
 // GET ALL WORKERS || PAGINATION || SEARCH || SORT || SORTBY
 const getAllWorkers = async (req, res, next) => {
