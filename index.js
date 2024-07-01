@@ -45,7 +45,7 @@ app.options('*', cors(optionCors));
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!! Backend Peworld');
+    res.send('Hello World!! Backend Peworld by Firman Jonathan');
 });
 
 
