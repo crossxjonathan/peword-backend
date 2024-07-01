@@ -43,6 +43,9 @@ const optionCors = {
 app.use(cors(optionCors));
 app.options('*', cors(optionCors));
 
+app.get('/', (req, res) => {
+    res.send('Hello World!! Backend Peworld by Firman Jonathan');
+});
 
 app.use(passport.initialize());
 passport.use('peWorldJWT', JwtFunction);
