@@ -74,7 +74,7 @@ app.use((err, req, res, next) => {
 })
 
 // console.log(__dirname, "<<upload storage");
-app.use('/file', express.static(path.join(__dirname, 'upload')))
+app.use('/photo', express.static(path.join(__dirname, 'upload')))
 
 //PORT
 app.listen(PORT, () => {

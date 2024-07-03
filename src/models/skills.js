@@ -22,8 +22,8 @@ const uptodateSkill = (data, id) => {
         [data.skill, id])
 }
 
-const getDetailSkill = (id) => {
-    return pool.query("SELECT * FROM skills WHERE id = $1", [id])
+const getDetailSkill = (workers_id) => {
+    return pool.query("SELECT * FROM skills WHERE id = $1", [workers_id])
 }
 
 module.exports = {

@@ -1,14 +1,16 @@
 /* eslint-disable no-unused-vars */
-const { selectAllWorker, getWorker, removeWorker, uptodateWorker, getDetailWorker } = require('../models/workers');
+const { selectAllWorker, getWorker, removeWorker, uptodateWorker, getDetailWorker, updateUploadPhoto, getWorkerByEmail, getUserByEmail } = require('../models/workers');
 const { response } = require('../helper/common');
+const cloudinary = require("../configs/cloudinary.config");
+
 
 // PROFILE
 const profile = async (req, res, next) => {
     try {
-        const userid = req.decoded.sub;
-        console.log(userid, 'userid');
-        const { rows: [user] } = await getWorker(userid);
-        console.log(user, "profile");
+        const email = req.decoded.email;
+        // console.log(req.decoded, '<<<<<<<<<<<<<<<<<<<<<req.decoded.sub');
+        const { rows: [user] } = await getUserByEmail(email);
+        // console.log(user, "<<<<<<<<<<<<<<<<<<<<<profile");
         if (user) {
             res.json({ profile: user });
         } else {
@@ -66,7 +68,7 @@ const deleteWorker = async (req, res, next) => {
 
 // UPDATE WORKER
 const updateWorker = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.workerId;
     try {
         const { name, description, job_desk, domicile, workplace } = req.body;
 
@@ -76,18 +78,37 @@ const updateWorker = async (req, res, next) => {
             job_desk,
             domicile,
             workplace
-        }
+        };
 
-        await uptodateWorker(data, id)
-        response(res, data, 200, 'Update Worker Successful!!')
+        await uptodateWorker(data, id);
+        response(res, data, 200, 'Update Worker Successful!!');
     } catch (error) {
         const objErr = {
-            message: 'something broke!!',
+            message: 'Something broke!!',
             statusCode: 500
-        }
-        next(objErr)
+        };
+        next(objErr);
     }
 };
+
+// UPDATE PHOTO WORKER
+const updatePhotoWorker = async (req, res, next) => {
+    try {
+        const email = req.decoded.email;
+        const { rows: [user] } = await getUserByEmail(email);
+        if (!user) {
+            return response(res, null, 401);
+        }
+        const result = await cloudinary.uploader.upload(req.file.path);
+        await updateUploadPhoto({ photo: result.secure_url }, user.id);
+        response(res, { file_url: result.secure_url }, 201, "Profile Photo Updated Successfully!!");
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+};
+
+
 
 // DETAIL WORKER
 const detailWorker = async (req, res, next) => {
@@ -110,5 +131,6 @@ module.exports = {
     deleteWorker,
     updateWorker,
     detailWorker,
+    updatePhotoWorker,
     profile
 }
