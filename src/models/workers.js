@@ -5,7 +5,7 @@ const selectAllWorker = ({ limit, offset, search, sortby, sort }) => {
     if (sortby && sort) {
         orderByClause = `ORDER BY ${sortby} ${sort}`;
     } else {
-        orderByClause = 'ORDER BY name ASC'; 
+        orderByClause = 'ORDER BY name ASC';
     }
 
     const query = `SELECT * FROM workers WHERE name ILIKE $1 ${orderByClause} LIMIT $2 OFFSET $3`;
@@ -31,11 +31,11 @@ const removeWorker = (id) => {
     return pool.query("DELETE FROM workers WHERE id = $1", [id])
 }
 
-const uptodateWorker = (data, id) => {
-    return pool.query(
-        "UPDATE workers SET name = $1, description = $2, job_desk = $3, domicile = $4, workplace = $5, photo = $6 WHERE id = $7", 
-        [data.name, data.description, data.job_desk, data.domicile, data.workplace, data.photo, id])
-}
+const uptodateWorker = async (data, id) => {
+    const query = `UPDATE workers SET name = $1, description = $2, phone = $3, job_desk = $4, domicile = $5, workplace = $6, updated_at = NOW() WHERE id = $7`;
+    const values = [data.name, data.description, data.phone, data.job_desk, data.domicile, data.workplace, id];
+    await pool.query(query, values);
+};
 
 
 const updateUploadPhoto = async (data, id) => {

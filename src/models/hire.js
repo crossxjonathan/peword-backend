@@ -8,11 +8,11 @@ const createHire = ({message_purpose, name, email, phone, description, workers_i
 }
 
 const selectRecruiter = () => {
-    return pool.query("SELECT workers_id FROM hire")
+    return pool.query("SELECT hire.message_purpose, hire.name, hire.email, hire.phone, hire.description, hire.recruiters_id workers_id FROM hire")
 }
 
 const selectWorker = () => {
-    return pool.query("SELECT recruiters_id FROM hire")
+    return pool.query("SELECT hire.message_purpose, hire.name, hire.email, hire.phone, hire.description, hire.workers_id recruiters_id FROM hire")
 }
 
 module.exports = {

@@ -68,28 +68,21 @@ const deleteWorker = async (req, res, next) => {
 
 // UPDATE WORKER
 const updateWorker = async (req, res, next) => {
-    const id = req.workerId;
     try {
-        const { name, description, job_desk, domicile, workplace } = req.body;
-
-        const data = {
-            name,
-            description,
-            job_desk,
-            domicile,
-            workplace
-        };
-
-        await uptodateWorker(data, id);
-        response(res, data, 200, 'Update Worker Successful!!');
+        const email = req.decoded.email;
+        const { rows: [user] } = await getUserByEmail(email);
+        if (!user) {
+            return response(res, null, 401, "User not found");
+        }
+        const data = req.body;
+        await uptodateWorker(data, user.id);
+        response(res, data, 200, "Profile Updated Successfully!!");
     } catch (error) {
-        const objErr = {
-            message: 'Something broke!!',
-            statusCode: 500
-        };
-        next(objErr);
+        console.error(error);
+        next(error);
     }
 };
+
 
 // UPDATE PHOTO WORKER
 const updatePhotoWorker = async (req, res, next) => {
@@ -107,8 +100,6 @@ const updatePhotoWorker = async (req, res, next) => {
         next(error);
     }
 };
-
-
 
 // DETAIL WORKER
 const detailWorker = async (req, res, next) => {

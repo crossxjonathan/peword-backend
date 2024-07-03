@@ -40,6 +40,7 @@ const checkEmailExist = async (email) => {
 const tokenFunction = (user) => {
     // console.log(user, '<<<user')
     const { id: userid, email, role } = user;
+    // eslint-disable-next-line no-undef
     const secret = process.env.JWTSECRET;
     const obj = { 
         sub: userid,
