@@ -21,8 +21,8 @@ CREATE TABLE workers(
     PRIMARY KEY(id)
 );
 
-INSERT INTO workers (name, description, job_desk, domicile, workplace, photo) 
-VALUES ('Herman', 'Nama saya Herman', 'Writer', 'Bandung', 'PT WritingIndo', 'https://res.cloudinary.com/ddeypvhxa/image/upload/v1719820378/liedyg52gfxzwznqxtvj.jpg');
+-- INSERT INTO workers (name, description, job_desk, domicile, workplace, photo) 
+-- VALUES ('Herman', 'Nama saya Herman', 'Writer', 'Bandung', 'PT WritingIndo', 'https://res.cloudinary.com/ddeypvhxa/image/upload/v1719820378/liedyg52gfxzwznqxtvj.jpg');
 
 
 -- INSERT INTO users(email, password, role, worker_id )VALUES('sheilamarcia@gmail.com', 'abc123', 'Manufaktur',6);
