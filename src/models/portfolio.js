@@ -1,13 +1,14 @@
 const pool = require('../configs/db');
 
-const selectAllPortfolio = () => {
-    return pool.query("SELECT * FROM portfolio ORDER BY id ASC")
+const getMyPortfolio = (workersId) => {
+    return pool.query("SELECT * FROM portfolio WHERE workers_id = $1", [workersId])
 }
 
-const createPortfolio = ({application_name, link_repository, type_portfolio, upload_image}) => {
+const createPortfolio = ({application_name, link_repository, type_portfolio, upload_image, workers_id}) => {
+    console.log(workers_id,'<<<<<<<<<<<<<<<<<<<<<workers_id');
     return pool.query(
-        `INSERT INTO portfolio (application_name, link_repository, type_portfolio, upload_image) VALUES ($1, $2, $3, $4) `, 
-        [application_name, link_repository, type_portfolio, upload_image]
+        `INSERT INTO portfolio (application_name, link_repository, type_portfolio, upload_image, workers_id) VALUES ($1, $2, $3, $4, $5) `, 
+        [application_name, link_repository, type_portfolio, upload_image, workers_id]
     );
 }
 
@@ -23,7 +24,7 @@ const getDetailPortfolio = (id) => {
 
 module.exports = {
     createPortfolio,
-    selectAllPortfolio,
+    getMyPortfolio,
     uptodatePortfolio,
     getDetailPortfolio
 }

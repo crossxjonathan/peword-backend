@@ -1,54 +1,64 @@
 /* eslint-disable no-unused-vars */
-const { selectAllSkill, createSkill, removeSkill, uptodateSkill, getDetailSkill } = require('../models/skills');
+const { createSkill, removeSkill, uptodateSkill, getDetailSkill, getMySkill } = require('../models/skills');
 const { response } = require('../helper/common');
 
-// GET ALL SKILL
-const getAllSkill = async (req, res, next) => {
-
-    const { rows } = await selectAllSkill()
-    res.json({
-        status: 'success',
-        data: rows
-    })
+// GET MY SKILLS
+const getMySkills = async (req, res, next) => {
+    const workersId = req.user.id;
+    console.log(workersId,'<<<<<<<<<<<<<<<<<<<workersId');
+    try {
+        const { rows } = await getMySkill(workersId);
+        res.json({
+            status: 'success',
+            data: rows
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to retrieve skills',
+            error: error.message
+        });
+    }
 };
 
 // ADD SKILL
 const addSkill = async (req, res, next) => {
-
-    const { skill_name, id } = req.body
-
-    const validationCharacter = /^[a-zA-Z\s]*$/;
-
-    if (!validationCharacter.test(skill_name)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Validation Name is Failed. do not use symbol in name!!'
-        });
-    }
-
+    const { skill_name } = req.body;
+    const workersId = req.user.id;
+    console.log(workersId, '<<<<<<<<<<<<<<workersId');
     const skillData = {
-        id,
-        skill_name
+        skill_name,
+        workers_id: workersId
     };
+    console.log('skilldata>>>>>>>>>>>>>>>', skillData);
 
     try {
-        await createSkill(skillData)
-        response(res, skillData, 201, 'Add Skill Successful!!')
+        await createSkill(skillData);
+        response(res, skillData, 201, 'Add Skill Successful!!');
     } catch (error) {
-        console.log(error);
-        return response(res, skillData, 500, 'Something wrong in adding data, Try again!!')
-    };
+        console.error(error);
+        return response(res, skillData, 500, 'Something went wrong in adding data, try again!');
+    }
 };
-
 
 // DELETE SKILL
 const deleteSkill = async (req, res, next) => {
-    const id = req.params.id
-    await removeSkill(id)
-    res.json({
-        status: 'success',
-        message: `Skill has been deleted by id ${id}`
-    });
+    const id = req.params.id;
+    try {
+        await removeSkill(id);
+        res.json({
+            status: 'success',
+            message: `Skill has been deleted by id ${id}`
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to delete skill',
+            error: error.message
+        });
+    }
 };
 
 // UPDATE SKILL
@@ -58,38 +68,48 @@ const updateSkill = async (req, res, next) => {
 
     const skillData = {
         skill: skill_name
-    }
+    };
 
     try {
-        await uptodateSkill(skillData, id)
+        await uptodateSkill(skillData, id);
         res.json({
             status: 'success',
             data: skillData,
-            message: `Skill Name Updated!!`
-        })
+            message: 'Skill Name Updated!!'
+        });
     } catch (error) {
-        return res.status(500).json({
+        console.error(error);
+        res.status(500).json({
             status: 'error',
-            message: 'Something wrong in Updating data, Please Check again!!',
+            message: 'Failed to update skill',
             error: error.message
         });
-    };
+    }
 };
 
 // DETAIL SKILL
 const detailSkill = async (req, res, next) => {
-    const id = req.params.id
-    const { rows: [skill_name] } = await getDetailSkill(id)
-    res.json({
-        status: 'success',
-        data: skill_name
-    })
+    const id = req.params.id;
+    try {
+        const { rows: [skill] } = await getDetailSkill(id);
+        res.json({
+            status: 'success',
+            data: skill
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to retrieve skill detail',
+            error: error.message
+        });
+    }
 };
 
 module.exports = {
-    getAllSkill,
+    getMySkills,
     addSkill,
     deleteSkill,
     updateSkill,
     detailSkill
-}
+};

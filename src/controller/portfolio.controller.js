@@ -1,24 +1,35 @@
+/* eslint-disable no-unused-vars */
 const {response} = require('../helper/common');
-const { createPortfolio, selectAllPortfolio, uptodatePortfolio, getDetailPortfolio } = require('../models/portfolio');
+const { createPortfolio, uptodatePortfolio, getDetailPortfolio, getMyPortfolio } = require('../models/portfolio');
 
 
 // GET ALL PORTFOLIO
 const getAllPortfolio = async (req, res, next) => {
-
-    const { rows } = await selectAllPortfolio()
-    res.json({
-        status: 'success',
-        data: rows
-    })
+    const workersId = req.user.id;
+    try {
+        const { rows } = await getMyPortfolio(workersId);
+        res.json({
+            status: 'success',
+            data: rows
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to retrieve Portofolio',
+            error: error.message
+        });
+    }
 };
 
 // ADD PORTOFOLIO
 const addPortfolio = async (req, res, next) => {
-
-    const { application_name, link_repository, type_portfolio, upload_image, id } = req.body;
-
+    const { application_name, link_repository, type_portfolio, upload_image } = req.body;
+    
+    const workersId = req.user.id;    
+    console.log(workersId,'<<<<<<<<<<<<<<<<<<<<<<<<<<workersId');
     const data = {
-        id,
+        workers_id: workersId,
         application_name, 
         link_repository, 
         type_portfolio,

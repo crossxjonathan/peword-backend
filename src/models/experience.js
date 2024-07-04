@@ -1,18 +1,20 @@
 const pool = require('../configs/db');
 
-const selectAllExperience = () => {
-    return pool.query("SELECT * FROM experience ORDER BY id ASC")
+const getMyExperience = (workersId) => {
+    return pool.query("SELECT * FROM experience WHERE workers_id = $1", [workersId])
 }
 
-const createExperience = ({position, company_name, month_company, year_company, description_company }) => {
+const createExperience = ({position, company_name, month_company, year_company, description_company, workers_id }) => {
+    console.log(workers_id, '<<<<<<<<<<<<<<<<<<<workers_id');
     return pool.query(
-        `INSERT INTO experience (position, company_name, month_company, year_company, description_company) VALUES ($1, $2, $3, $4, $5) `, 
-        [position, company_name, month_company, year_company, description_company]
+        `INSERT INTO experience (position, company_name, month_company, year_company, description_company, workers_id) VALUES ($1, $2, $3, $4, $5, $6) `, 
+        [position, company_name, month_company, year_company, description_company, workers_id]
     );
 }
 
 const removeExperience = (id) => {
-    return pool.query("DELETE FROM experience WHERE id = $1", [id])
+    console.log(`Removing experience with id: ${id}`);
+    return pool.query("DELETE FROM experience WHERE id = $1", [id]);
 }
 
 const uptodateExperience = (data, id) => {
@@ -27,7 +29,7 @@ const getDetailExperience = (id) => {
 
 module.exports = {
     createExperience,
-    selectAllExperience,
+    getMyExperience,
     uptodateExperience,
     getDetailExperience,
     removeExperience

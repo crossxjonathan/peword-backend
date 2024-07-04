@@ -1,29 +1,42 @@
+/* eslint-disable no-unused-vars */
 const { response } = require('../helper/common');
-const { createExperience, selectAllExperience, uptodateExperience, getDetailExperience, removeExperience } = require('../models/experience');
+const { createExperience, uptodateExperience, getDetailExperience, removeExperience, getMyExperience } = require('../models/experience');
 const setClient = require('../configs/redis');
 // GET ALL EXPERIENCE
 const getAllExperience = async (req, res, next) => {
-
-    const { rows } = await selectAllExperience()
-    res.json({
-        status: 'success',
-        data: rows
-    })
+    const workersId = req.user.id;
+    try {
+        const { rows } = await getMyExperience(workersId);
+        res.json({
+            status: 'success',
+            data: rows
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to retrieve Experience',
+            error: error.message
+        });
+    }
 };
 
 // ADD EXPERIENCE
 const addExperience = async (req, res, next) => {
 
-    const { position, company_name, month_company, year_company, description_company, id } = req.body;
+    const { position, company_name, month_company, year_company, description_company } = req.body;
+
+    const workersId = req.user.id;
 
     const data = {
-        id,
+        workers_id: workersId,
         position, 
         company_name, 
         month_company,
         year_company, 
         description_company
     };
+    console.log(data, '<<<<<<<<<<<<<<<data workers');
 
     try {
         await createExperience(data)
@@ -37,12 +50,22 @@ const addExperience = async (req, res, next) => {
 
 // DELETE EXPERIENCE
 const deleteExperience = async (req, res, next) => {
-    const id = req.params.id
-    await removeExperience(id)
-    res.json({
-        status: 'success',
-        message: `Experience has been deleted by id ${id}`
-    });
+    const id = req.params.id;
+    console.log(`Deleting experience with id: ${id}`);
+    try {
+        await removeExperience(id);
+        res.json({
+            status: 'success',
+            message: `Experience has been deleted by id ${id}`
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to delete experience',
+            error: error.message
+        });
+    }
 };
 
 
