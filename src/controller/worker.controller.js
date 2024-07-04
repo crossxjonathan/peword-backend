@@ -7,9 +7,9 @@ const cloudinary = require("../configs/cloudinary.config");
 // PROFILE
 const profile = async (req, res, next) => {
     try {
-        const email = req.user.id;
+        const email = req.decoded.email;
         // console.log(req.decoded, '<<<<<<<<<<<<<<<<<<<<<req.decoded.sub');
-        const { rows: [user] } = await getWorker(email);
+        const { rows: [user] } = await getUserByEmail(email);
         // console.log(user, "<<<<<<<<<<<<<<<<<<<<<profile");
         if (user) {
             res.json({ profile: user });

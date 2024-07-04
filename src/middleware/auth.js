@@ -10,6 +10,7 @@ const protect = (req, res, next) => {
             const token = bearerToken.split(' ')[1];
             const decoded = jwt.verify(token, process.env.JWTSECRET);
             req.user = { id: decoded.sub };
+            req.decoded = decoded;
             // console.log('Authenticated user:', req.user);
             next();
         } else {
