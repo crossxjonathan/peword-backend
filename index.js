@@ -20,6 +20,7 @@ const hireRoute = require('./src/routes/hire.route');
 const uploadRoute = require('./src/routes/upload.route');
 
 const { JwtFunction } = require('./src/middleware/jwt');
+const upload = require('./src/middleware/upload');
 
 const PORT = process.env.PORT
 const app = express();
@@ -64,6 +65,7 @@ app.use('/upload', uploadRoute);
 
 
 // ERROR HANDLING
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
     console.log(err);
     const messageError = err.message || 'Internal Server Error'
@@ -75,6 +77,10 @@ app.use((err, req, res, next) => {
 
 // console.log(__dirname, "<<upload storage");
 app.use('/photo', express.static(path.join(__dirname, 'upload')))
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    res.json({ file: req.file });
+  });  
 
 //PORT
 app.listen(PORT, () => {
