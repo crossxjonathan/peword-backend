@@ -12,6 +12,11 @@ const createPortfolio = ({application_name, link_repository, type_portfolio, upl
     );
 }
 
+const removePortfolio = (id) => {
+    console.log(`Removing portfolio with id: ${id}`);
+    return pool.query("DELETE FROM portfolio WHERE id = $1", [id]);
+}
+
 const uptodatePortfolio = (data, id) => {
     return pool.query(
         "UPDATE portfolio SET application_name = $1, link_repository = $2, type_portfolio = $3, upload_image = $4 WHERE id = $5", 
@@ -26,5 +31,6 @@ module.exports = {
     createPortfolio,
     getMyPortfolio,
     uptodatePortfolio,
-    getDetailPortfolio
+    getDetailPortfolio,
+    removePortfolio,
 }

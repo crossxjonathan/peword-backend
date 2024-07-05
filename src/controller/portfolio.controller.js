@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const {response} = require('../helper/common');
-const { createPortfolio, uptodatePortfolio, getDetailPortfolio, getMyPortfolio } = require('../models/portfolio');
+const { createPortfolio, uptodatePortfolio, getDetailPortfolio, getMyPortfolio, removePortfolio } = require('../models/portfolio');
 
 
 // GET ALL PORTFOLIO
@@ -45,6 +45,27 @@ const addPortfolio = async (req, res, next) => {
     };
 };
 
+// DELETE EXPERIENCE
+const deletePortfolio = async (req, res, next) => {
+    const id = req.params.id;
+    console.log(`Deleting portfolio with id: ${id}`);
+    try {
+        await removePortfolio(id);
+        res.json({
+            status: 'success',
+            message: `Portfolio has been deleted by id ${id}`
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to delete portfolio',
+            error: error.message
+        });
+    }
+};
+
+
 // UPDATE PORTFOLIO
 const updatePortfolio = async (req, res, next) => {
     const id = req.params.id;
@@ -87,5 +108,6 @@ module.exports = {
     addPortfolio,
     getAllPortfolio,
     updatePortfolio,
-    detailPortfolio
+    detailPortfolio,
+    deletePortfolio,
 }
