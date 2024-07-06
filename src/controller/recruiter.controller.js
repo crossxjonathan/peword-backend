@@ -1,5 +1,25 @@
-const { createRecruiter, selectAllRecruiter, removeRecruiter, getDetailRecruiter, uptodateRecruiter } = require('../models/recruiters');
+/* eslint-disable no-unused-vars */
+const { createRecruiter, selectAllRecruiter, removeRecruiter, getDetailRecruiter, uptodateRecruiter, getUserByEmail } = require('../models/recruiters');
 const {response} = require('../helper/common');
+
+// PROFILE
+const profile = async (req, res, next) => {
+    try {
+        const email = req.decoded.email;
+        // console.log(req.decoded, '<<<<<<<<<<<<<<<<<<<<<req.decoded.sub');
+        const { rows: [user] } = await getUserByEmail(email);
+        // console.log(user, "<<<<<<<<<<<<<<<<<<<<<profile");
+        if (user) {
+            res.json({ profile: user });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 
 // GET ALL RECRUITERS
 const getAllRecruiters = async (req, res, next) => {
@@ -135,5 +155,6 @@ module.exports = {
     addRecruiter,
     deleteRecruiter,
     updateRecruiter,
-    detailRecruiter
+    detailRecruiter,
+    profile
 }
