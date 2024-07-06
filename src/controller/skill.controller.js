@@ -89,9 +89,9 @@ const updateSkill = async (req, res, next) => {
 
 // DETAIL SKILL
 const detailSkill = async (req, res, next) => {
-    const id = req.params.id;
+    const workerId = req.params.id;
     try {
-        const { rows: [skill] } = await getDetailSkill(id);
+        const { rows: [skill] } = await getDetailSkill(workerId);
         res.json({
             status: 'success',
             data: skill

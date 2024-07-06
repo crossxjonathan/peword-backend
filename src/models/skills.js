@@ -23,8 +23,8 @@ const uptodateSkill = (data, id) => {
     );
 };
 
-const getDetailSkill = (id) => {
-    return pool.query("SELECT * FROM skills WHERE id = $1", [id]);
+const getDetailSkill = (workersId) => {
+    return pool.query("SELECT * FROM skills WHERE workers_id = $1" , [workersId]);
 };
 
 module.exports = {
