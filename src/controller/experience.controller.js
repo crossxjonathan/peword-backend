@@ -6,7 +6,7 @@ const setClient = require('../configs/redis');
 const getAllExperience = async (req, res, next) => {
     const workersId = req.user.id;
     try {
-        const { rows } = await getMyExperience(workersId);
+        const { rows } = await getDetailExperience(workersId);
         res.json({
             status: 'success',
             data: rows
@@ -101,15 +101,28 @@ const updateExperience = async (req, res, next) => {
 
 // DETAIL EXPERIENCE
 const detailExperience = async (req, res, next) => {
-    const id = req.params.id
-    const { rows: [user] } = await getDetailExperience(id)
-    // const client = await setClient()
-    // console.log(client, "<<<<<<redis");
-    // await client.setEx(`experience/${id}`, 60*60, JSON.stringify[user])
-    res.json({
-        status: 'success',
-        data: user
-    })
+    const workersId = req.params.id;
+    try {
+        const { rows: experiences } = await getDetailExperience(workersId);
+        if (experiences.length > 0) {
+            res.json({
+                status: 'success',
+                data: experiences
+            });
+        } else {
+            res.status(404).json({
+                status: 'error',
+                message: 'Experience not found'
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to retrieve experience details',
+            error: error.message
+        });
+    }
 };
 
 module.exports = {

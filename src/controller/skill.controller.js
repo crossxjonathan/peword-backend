@@ -7,7 +7,7 @@ const getMySkills = async (req, res, next) => {
     const workersId = req.user.id;
     console.log(workersId,'<<<<<<<<<<<<<<<<<<<workersId');
     try {
-        const { rows } = await getMySkill(workersId);
+        const { rows } = await getDetailSkill(workersId);
         res.json({
             status: 'success',
             data: rows
@@ -89,18 +89,25 @@ const updateSkill = async (req, res, next) => {
 
 // DETAIL SKILL
 const detailSkill = async (req, res, next) => {
-    const workerId = req.params.id;
+    const workersId = req.params.id;
     try {
-        const { rows: [skill] } = await getDetailSkill(workerId);
-        res.json({
-            status: 'success',
-            data: skill
-        });
+        const { rows: skills } = await getDetailSkill(workersId);
+        if (skills.length > 0) {
+            res.json({
+                status: 'success',
+                data: skills
+            });
+        } else {
+            res.status(404).json({
+                status: 'error',
+                message: 'Skills not found'
+            });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({
             status: 'error',
-            message: 'Failed to retrieve skill detail',
+            message: 'Failed to retrieve portfolio details',
             error: error.message
         });
     }

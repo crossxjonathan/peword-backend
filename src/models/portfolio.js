@@ -13,7 +13,7 @@ const createPortfolio = ({application_name, link_repository, type_portfolio, upl
 }
 
 const removePortfolio = (id) => {
-    console.log(`Removing portfolio with id: ${id}`);
+    // console.log(`Removing portfolio with id: ${id}`);
     return pool.query("DELETE FROM portfolio WHERE id = $1", [id]);
 }
 
@@ -23,8 +23,8 @@ const uptodatePortfolio = (data, id) => {
         [data.application_name, data.link_repository, data.type_portfolio, data.upload_image, id])
 }
 
-const getDetailPortfolio = (id) => {
-    return pool.query("SELECT * FROM portfolio WHERE id = $1", [id])
+const getDetailPortfolio = (workers_id) => {
+    return pool.query("SELECT id, application_name, link_repository, type_portfolio, upload_image, created_at, updated_at FROM portfolio WHERE workers_id = $1", [workers_id])
 }
 
 module.exports = {

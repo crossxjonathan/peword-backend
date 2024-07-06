@@ -23,8 +23,8 @@ const uptodateExperience = (data, id) => {
         [data.company_name, data.position, data.month_company, data.year_company, data.description_company, id])
 }
 
-const getDetailExperience = (id) => {
-    return pool.query("SELECT * FROM experience WHERE id = $1", [id])
+const getDetailExperience = (workers_id) => {
+    return pool.query("SELECT id, company_name, position, month_company, year_company, description_company, created_at, updated_at FROM experience WHERE workers_id = $1", [workers_id])
 }
 
 module.exports = {
