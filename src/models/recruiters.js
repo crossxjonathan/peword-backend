@@ -4,6 +4,13 @@ const selectAllRecruiter = () => {
     return pool.query("SELECT * FROM recruiters ORDER BY id ASC")
 }
 
+const getUserByEmail = (email) => {
+    return pool.query(
+        'SELECT users.email, users.role, recruiters.* FROM users JOIN recruiters on users.id = recruiters.users_id WHERE email = $1',
+        [email]
+    )
+}
+
 const createRecruiter = ({name, description, position, city, company, phone, instagram, linkedin, photo}) => {
     return pool.query(
         `INSERT INTO recruiters (name, description, position, city, company, phone, instagram, linkedin, photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) `, 
@@ -30,5 +37,6 @@ module.exports = {
     createRecruiter,
     removeRecruiter,
     uptodateRecruiter,
-    getDetailRecruiter
+    getDetailRecruiter,
+    getUserByEmail
 }
