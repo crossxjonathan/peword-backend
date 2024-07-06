@@ -7,7 +7,7 @@ const { createPortfolio, uptodatePortfolio, getDetailPortfolio, getMyPortfolio, 
 const getAllPortfolio = async (req, res, next) => {
     const workersId = req.user.id;
     try {
-        const { rows } = await getMyPortfolio(workersId);
+        const { rows } = await getDetailPortfolio(workersId);
         res.json({
             status: 'success',
             data: rows
@@ -95,13 +95,29 @@ const updatePortfolio = async (req, res, next) => {
 };
 
 // DETAIL PORTFOLIO
-const detailPortfolio = async (req, res, next) => {
-    const id = req.params.id
-    const { rows: [user] } = await getDetailPortfolio(id)
-    res.json({
-        status: 'success',
-        data: user
-    })
+const detailPortfolio = async (req, res) => {
+    const workersId = req.params.id;
+    try {
+        const { rows: portfolios } = await getDetailPortfolio(workersId);
+        if (portfolios.length > 0) {
+            res.json({
+                status: 'success',
+                data: portfolios
+            });
+        } else {
+            res.status(404).json({
+                status: 'error',
+                message: 'Portfolio not found'
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to retrieve portfolio details',
+            error: error.message
+        });
+    }
 };
 
 module.exports = {
