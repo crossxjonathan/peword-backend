@@ -4,10 +4,10 @@ const { response } = require('../helper/common');
 
 // GET MY SKILLS
 const getMySkills = async (req, res, next) => {
-    const workersId = req.user.id;
-    console.log(workersId,'<<<<<<<<<<<<<<<<<<<workersId');
+    const id = req.user.id;
+    console.log(id,'<<<<<<<<<<<<<<<<<<<id');
     try {
-        const { rows } = await getDetailSkill(workersId);
+        const { rows } = await getDetailSkill(id);
         res.json({
             status: 'success',
             data: rows
@@ -92,17 +92,10 @@ const detailSkill = async (req, res, next) => {
     const workersId = req.params.id;
     try {
         const { rows: skills } = await getDetailSkill(workersId);
-        if (skills.length > 0) {
             res.json({
                 status: 'success',
                 data: skills
             });
-        } else {
-            res.status(404).json({
-                status: 'error',
-                message: 'Skills not found'
-            });
-        }
     } catch (error) {
         console.error(error);
         res.status(500).json({
