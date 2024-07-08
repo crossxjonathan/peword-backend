@@ -104,17 +104,10 @@ const detailExperience = async (req, res, next) => {
     const workersId = req.params.id;
     try {
         const { rows: experiences } = await getDetailExperience(workersId);
-        if (experiences.length > 0) {
             res.json({
                 status: 'success',
                 data: experiences
             });
-        } else {
-            res.status(404).json({
-                status: 'error',
-                message: 'Experience not found'
-            });
-        }
     } catch (error) {
         console.error(error);
         res.status(500).json({
