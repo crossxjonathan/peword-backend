@@ -99,17 +99,10 @@ const detailPortfolio = async (req, res) => {
     const workersId = req.params.id;
     try {
         const { rows: portfolios } = await getDetailPortfolio(workersId);
-        if (portfolios.length > 0) {
             res.json({
                 status: 'success',
                 data: portfolios
             });
-        } else {
-            res.status(404).json({
-                status: 'error',
-                message: 'Portfolio not found'
-            });
-        }
     } catch (error) {
         console.error(error);
         res.status(500).json({
