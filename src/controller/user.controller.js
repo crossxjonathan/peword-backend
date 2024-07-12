@@ -35,8 +35,8 @@ const Login = async (req, res, next) => {
         }
 
         const token = tokenFunction(user);
-        const newRefreshToken = refreshTokenJWT(user.id);
-
+        const newRefreshToken = refreshTokenJWT({email: user.email, role: user.role, userid: user.id});
+        console.log(newRefreshToken, '<<<<<<<<<<<<<<<<<<<<<<newrefreshtoken');
         let options = {
             maxAge: 1000 * 60 * 60 * 24,
             httpOnly: false,
@@ -48,6 +48,7 @@ const Login = async (req, res, next) => {
 
         userToBeSend.token = token;
         userToBeSend.refreshToken = newRefreshToken;
+        console.log(newRefreshToken, '<<<<<<<<<<<<<<<<<<<<<<newrefreshtoken');
         return responsecookies(res, userToBeSend, 200, 'Login Successful', options);
     } catch (error) {
         console.error('Error fetching user by email:', error);
