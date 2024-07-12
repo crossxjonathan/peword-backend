@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const { createSkill, removeSkill, uptodateSkill, getDetailSkill, getMySkill } = require('../models/skills');
 const { response } = require('../helper/common');
+const workers = require('../models/workers');
 
 // GET MY SKILLS
 const getMySkills = async (req, res, next) => {
@@ -25,11 +26,11 @@ const getMySkills = async (req, res, next) => {
 // ADD SKILL
 const addSkill = async (req, res, next) => {
     const { skill_name } = req.body;
-    const workersId = req.user.id;
-    console.log(workersId, '<<<<<<<<<<<<<<workersId');
+    const email = req.decoded.email;
+    const { rows: [user] } = await workers.getUserByEmail(email, {relation: 'workers'});
     const skillData = {
         skill_name,
-        workers_id: workersId
+        workers_id: user.id
     };
     console.log('skilldata>>>>>>>>>>>>>>>', skillData);
 
