@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const {response} = require('../helper/common');
-const { createPortfolio, uptodatePortfolio, getDetailPortfolio, getMyPortfolio, removePortfolio } = require('../models/portfolio');
+const { createPortfolio, uptodatePortfolio, getDetailPortfolio, removePortfolio } = require('../models/portfolio');
 
 
 // GET ALL PORTFOLIO
@@ -98,10 +98,10 @@ const updatePortfolio = async (req, res, next) => {
 const detailPortfolio = async (req, res) => {
     const workersId = req.params.id;
     try {
-        const { rows: portfolios } = await getDetailPortfolio(workersId);
+        const { rows: portfolio } = await getDetailPortfolio(workersId);
             res.json({
                 status: 'success',
-                data: portfolios
+                data: portfolio
             });
     } catch (error) {
         console.error(error);
