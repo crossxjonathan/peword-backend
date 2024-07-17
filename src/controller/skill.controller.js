@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { createSkill, removeSkill, uptodateSkill, getDetailSkill, getMySkill } = require('../models/skills');
+const { createSkill, removeSkill, uptodateSkill, getDetailSkill } = require('../models/skills');
 const { response } = require('../helper/common');
 const workers = require('../models/workers');
 
