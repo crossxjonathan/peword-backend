@@ -47,7 +47,7 @@ const addPortfolio = async (req, res, next) => {
 
 // DELETE EXPERIENCE
 const deletePortfolio = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.user.id;
     console.log(`Deleting portfolio with id: ${id}`);
     try {
         await removePortfolio(id);
@@ -68,7 +68,7 @@ const deletePortfolio = async (req, res, next) => {
 
 // UPDATE PORTFOLIO
 const updatePortfolio = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.user.id;
 
     const { application_name, link_repository, type_portfolio, upload_image } = req.body;
 
@@ -96,7 +96,7 @@ const updatePortfolio = async (req, res, next) => {
 
 // DETAIL PORTFOLIO
 const detailPortfolio = async (req, res) => {
-    const workersId = req.params.id;
+    const workersId = req.user.id;
     try {
         const { rows: portfolio } = await getDetailPortfolio(workersId);
             res.json({
