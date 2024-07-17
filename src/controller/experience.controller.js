@@ -50,7 +50,7 @@ const addExperience = async (req, res, next) => {
 
 // DELETE EXPERIENCE
 const deleteExperience = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.user.id;
     console.log(`Deleting experience with id: ${id}`);
     try {
         await removeExperience(id);
@@ -71,7 +71,7 @@ const deleteExperience = async (req, res, next) => {
 
 // UPDATE EXPERIENCE
 const updateExperience = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.user.id;
 
     const { position, company_name, month_company, year_company, description_company } = req.body;
 
@@ -101,7 +101,7 @@ const updateExperience = async (req, res, next) => {
 
 // DETAIL EXPERIENCE
 const detailExperience = async (req, res, next) => {
-    const workersId = req.params.id;
+    const workersId = req.user.id;
     try {
         const { rows: experiences } = await getDetailExperience(workersId);
             res.json({

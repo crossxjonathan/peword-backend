@@ -45,7 +45,7 @@ const addSkill = async (req, res, next) => {
 
 // DELETE SKILL
 const deleteSkill = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.user.id;
     try {
         await removeSkill(id);
         res.json({
@@ -64,7 +64,7 @@ const deleteSkill = async (req, res, next) => {
 
 // UPDATE SKILL
 const updateSkill = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.user.id;
     const { skill_name } = req.body;
 
     const skillData = {
@@ -90,7 +90,7 @@ const updateSkill = async (req, res, next) => {
 
 // DETAIL SKILL
 const detailSkill = async (req, res, next) => {
-    const workersId = req.params.id;
+    const workersId = req.user.id;
     try {
         const { rows: skills } = await getDetailSkill(workersId);
             res.json({
