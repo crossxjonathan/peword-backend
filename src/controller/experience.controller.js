@@ -101,7 +101,7 @@ const updateExperience = async (req, res, next) => {
 
 // DETAIL EXPERIENCE
 const detailExperience = async (req, res, next) => {
-    const workersId = req.user.id;
+    const workersId = req.params.id;
     try {
         const { rows: experiences } = await getDetailExperience(workersId);
             res.json({

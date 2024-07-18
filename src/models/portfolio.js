@@ -24,7 +24,7 @@ const uptodatePortfolio = (data, id) => {
 }
 
 const getDetailPortfolio = (id) => {
-    return pool.query("SELECT id, application_name, link_repository, type_portfolio, upload_image, created_at, updated_at FROM portfolio WHERE workers_id = $1", [id])
+    return pool.query("SELECT portfolio.id, portfolio.application_name, portfolio.link_repository, portfolio.type_portfolio, portfolio.upload_image, portfolio.created_at, portfolio.updated_at FROM portfolio WHERE workers_id = $1", [id])
 }
 
 module.exports = {

@@ -86,6 +86,7 @@ const registerWorkers = async (req, res, next) => {
     try {
         const emailExist = await checkEmailExist(email);
         if (emailExist === true) {
+            console.log(res, '<<<<<<<<<<<<<<<<<Email Exist!!');
             return response(res, null, 500, 'email exist, please login!!')
         }
         const salt = await bcrypt.genSalt(saltNumber);
@@ -105,6 +106,7 @@ const registerRecruiters = async (req, res, next) => {
     try {
         const emailExist = await checkEmailExist(email);
         if (emailExist === true) {
+            console.log(res, '<<<<<<<<<<<<<<<<<Email Exist!!');
             return response(res, null, 500, 'email exist, please login!!')
         }
         const salt = await bcrypt.genSalt(saltNumber);
