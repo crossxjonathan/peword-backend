@@ -6,7 +6,7 @@ const workers = require('../models/workers');
 // GET MY SKILLS
 const getMySkills = async (req, res, next) => {
     const id = req.user.id;
-    console.log(id,'<<<<<<<<<<<<<<<<<<<id');
+    console.log(id,'**&*&*&*&*&*&*&*^**%*%*%%id');
     try {
         const { rows } = await getDetailSkill(id);
         res.json({
@@ -30,9 +30,9 @@ const addSkill = async (req, res, next) => {
     const { rows: [user] } = await workers.getUserByEmail(email, {relation: 'workers'});
     const skillData = {
         skill_name,
-        workers_id: user.id
+        workers_id: user.users_id
     };
-    console.log('skilldata>>>>>>>>>>>>>>>', skillData);
+    // console.log('skilldata>>>>>>>>>>>>>>>', skillData);
 
     try {
         await createSkill(skillData);
@@ -64,7 +64,7 @@ const deleteSkill = async (req, res, next) => {
 
 // UPDATE SKILL
 const updateSkill = async (req, res, next) => {
-    const id = req.user.id;
+    const id = req.params.id;
     const { skill_name } = req.body;
 
     const skillData = {
@@ -90,7 +90,7 @@ const updateSkill = async (req, res, next) => {
 
 // DETAIL SKILL
 const detailSkill = async (req, res, next) => {
-    const workersId = req.user.id;
+    const workersId = req.params.id;
     try {
         const { rows: skills } = await getDetailSkill(workersId);
             res.json({

@@ -52,7 +52,7 @@ const updateUploadPhoto = async (data, id) => {
 
 
 const getDetailWorker = (id) => {
-    return pool.query("SELECT * FROM workers WHERE id = $1", [id]);
+    return pool.query("SELECT * FROM workers WHERE users_id = $1", [id]);
 }
 
 const findUserById = async (id, relation = null) => {

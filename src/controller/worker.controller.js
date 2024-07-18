@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { selectAllWorker, getWorker, removeWorker, uptodateWorker, getDetailWorker, updateUploadPhoto, getWorkerByEmail, getUserByEmail } = require('../models/workers');
+const { selectAllWorker, removeWorker, uptodateWorker, getDetailWorker, updateUploadPhoto, getWorkerByEmail, getUserByEmail } = require('../models/workers');
 const { response } = require('../helper/common');
 const cloudinary = require("../configs/cloudinary.config");
 
@@ -10,7 +10,7 @@ const profile = async (req, res, next) => {
         const email = req.decoded.email;
         // console.log(req.decoded, '<<<<<<<<<<<<<<<<<<<<<req.decoded.sub');
         const { rows: [user] } = await getUserByEmail(email);
-        console.log(user, "<<<<<<<<<<<<<<<<<<<<<profile");
+        // console.log(user, "<<<<<<<<<<<<<<<<<<<<<profile");
         if (user) {
             res.json({ profile: user });
         } else {
